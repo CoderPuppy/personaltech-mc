@@ -1,0 +1,62 @@
+buildscript {
+	repositories {
+		mavenCentral()
+		maven {
+			name = "forge"
+			url = "http://files.minecraftforge.net/maven"
+		}
+		maven {
+			name = "sonatype"
+			url = "https://oss.sonatype.org/content/repositories/snapshots/"
+		}
+	}
+	
+	dependencies {
+		classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+	}
+}
+
+apply plugin: 'java'
+
+archivesBaseName = 'personaltech-mc'
+group = 'cpup.mc.personalTech'
+version = 'dev'
+
+repositories {
+	mavenCentral()
+	mavenLocal()
+}
+
+dependencies {
+	compile 'cpup.lib:cpup-lib:dev'
+	compile 'cpup.mc.lib:cpup-mc:dev'
+}
+
+apply plugin: 'scala'
+dependencies.compile "org.scala-lang:scala-library:2.10.2"
+
+apply plugin: 'forge'
+ext {
+	mc = [
+		version: '1.7.2',
+		forgeVersion: '10.12.1.1060'
+	]
+}
+minecraft {
+	version = "$mc.version-$mc.forgeVersion"
+	assetDir = 'eclipse/assets'
+}
+
+apply plugin: 'maven'
+
+processResources {
+	from(sourceSets.main.resources.srcDirs) {
+		include 'mcmod.info'
+
+		expand version: version, mcVersion: mc.version
+	}
+
+	from(sourceSets.main.resources.srcDirs) {
+		exclude 'mcmod.info'
+	}
+}
