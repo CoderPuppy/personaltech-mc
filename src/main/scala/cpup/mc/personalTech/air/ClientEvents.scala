@@ -21,11 +21,11 @@ class ClientEvents {
 		if(choosePowerKeyBind.getIsKeyPressed) {
 			val tess = Tessellator.instance
 			val mc = Minecraft.getMinecraft
-			val screenWidth = mc.displayWidth
-			val screenHeight = mc.displayHeight
+			val screenWidth = mc.displayWidth / 2
+			val screenHeight = mc.displayHeight / 2
 
-			tess.setColorOpaque(255, 255, 255)
 			tess.startDrawingQuads()
+			tess.setColorOpaque(0, 0, 0)
 			val width = 50
 			val height = 50
 //			println("s.w, s.h", screenWidth, screenHeight, width, height)
