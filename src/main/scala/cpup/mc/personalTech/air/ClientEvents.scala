@@ -71,7 +71,7 @@ class ClientEvents {
 			mc.renderEngine.bindTexture(icons)
 			GL11.glEnable(GL11.GL_BLEND)
 			OpenGlHelper.glBlendFunc(GL11.GL_ONE_MINUS_DST_COLOR, GL11.GL_ONE_MINUS_SRC_COLOR, 1, 0)
-			drawTexturedModalRect(x + width / 2 + cursorX - 7, x + width / 2 + cursorX - 7, 0, 0, 16, 16)
+			drawTexturedModalRect(x + width / 2 + cursorX - 7, y + height / 2 + cursorY - 7, 0, 0, 16, 16)
 			OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0)
 			GL11.glDisable(GL11.GL_BLEND)
 		}
