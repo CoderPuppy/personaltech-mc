@@ -21,7 +21,7 @@ class ClientEvents {
 			val screenWidth = Display.getWidth
 			val screenHeight = Display.getHeight
 
-			tess.setColorOpaque(0, 0, 0)
+			tess.setColorOpaque(255, 255, 255)
 			tess.startDrawingQuads()
 			val width = 50
 			val height = 50
