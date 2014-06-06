@@ -2,7 +2,7 @@ package cpup.mc.personalTech.air
 
 import net.minecraft.client.settings.KeyBinding
 import cpup.mc.personalTech.PersonalTech
-import org.lwjgl.input.Keyboard
+import org.lwjgl.input.{Mouse, Keyboard}
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 import net.minecraft.client.renderer.{OpenGlHelper, Tessellator}
@@ -21,6 +21,9 @@ class ClientEvents {
 	val icons = new ResourceLocation("textures/gui/icons.png")
 	var cursorX = 0
 	var cursorY = 0
+	var playerYaw = 0f
+	var playerYawHead = 0f
+	var playerPitch = 0f
 
 	@SubscribeEvent
 	def renderOverlay(e: RenderGameOverlayEvent) {
@@ -74,6 +77,23 @@ class ClientEvents {
 		}
 	}
 
+	@SubscribeEvent
+	def renderTick(e: TickEvent.RenderTickEvent) {
+		if(choosePowerKeyBind.getIsKeyPressed) {
+			val mc = Minecraft.getMinecraft
+			Mouse.getDX
+			Mouse.getDY
+			mc.mouseHelper.deltaX = 0
+			mc.mouseHelper.deltaY = 0
+			mc.thePlayer.rotationYaw = playerYaw
+			mc.thePlayer.prevRotationYaw = playerYaw
+			mc.thePlayer.rotationYawHead = playerYawHead
+			mc.thePlayer.prevRotationYawHead = playerYawHead
+			mc.thePlayer.rotationPitch = playerPitch
+			mc.thePlayer.prevRotationPitch = playerPitch
+		}
+	}
+
 	def drawTexturedModalRect(par1: Int, par2: Int, par3: Int, par4: Int, par5: Int, par6: Int) {
 		val f: Float = 0.00390625F
 		val f1: Float = 0.00390625F
@@ -89,8 +109,12 @@ class ClientEvents {
 	@SubscribeEvent
 	def keyEvent(e: InputEvent.KeyInputEvent) {
 		if(choosePowerKeyBind.getIsKeyPressed && !wasChoosePowerDown) {
+			val mc = Minecraft.getMinecraft
 			cursorX = 0
 			cursorY = 0
+			playerYaw = mc.thePlayer.rotationYaw
+			playerYawHead = mc.thePlayer.rotationYawHead
+			playerPitch = mc.thePlayer.rotationPitch
 		}
 		wasChoosePowerDown = choosePowerKeyBind.getIsKeyPressed
 	}
