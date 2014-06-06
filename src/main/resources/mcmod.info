@@ -1,0 +1,12 @@
+[
+	{
+		"modid": "personaltech",
+		"name": "Personal Tech",
+		"version": "$version",
+		"mcversion": "$mcVersion",
+		"authors": ["CoderPuppy"],
+		"dependencies": [
+			"required-after:cpup-mc"
+		]
+	}
+]
