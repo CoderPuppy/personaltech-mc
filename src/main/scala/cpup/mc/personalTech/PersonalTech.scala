@@ -16,6 +16,7 @@ object PersonalTech extends CPupMod[Ref.type] {
 	override def preInit(e: FMLPreInitializationEvent) {
 		super.preInit(e)
 		logger.debug("preinit")
+		println(proxy)
 		proxy.registerEvents
 	}
 }
