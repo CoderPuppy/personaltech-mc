@@ -4,7 +4,7 @@ import net.minecraft.client.settings.KeyBinding
 import cpup.mc.personalTech.PersonalTech
 import org.lwjgl.input.{Mouse, Keyboard}
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
-import net.minecraftforge.client.event.RenderGameOverlayEvent
+import net.minecraftforge.client.event.{MouseEvent, RenderGameOverlayEvent}
 import net.minecraft.client.renderer.{OpenGlHelper, Tessellator}
 import net.minecraft.client.Minecraft
 import cpw.mods.fml.client.registry.ClientRegistry
@@ -91,6 +91,14 @@ class ClientEvents {
 			mc.thePlayer.prevRotationYawHead = playerYawHead
 			mc.thePlayer.rotationPitch = playerPitch
 			mc.thePlayer.prevRotationPitch = playerPitch
+		}
+	}
+
+	@SubscribeEvent
+	def mouse(e: MouseEvent) {
+		if(choosePowerKeyBind.getIsKeyPressed) {
+			cursorX += e.dx / 1000
+			cursorY += e.dy / 1000
 		}
 	}
 
