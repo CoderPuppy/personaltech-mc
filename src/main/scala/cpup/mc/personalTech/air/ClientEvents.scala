@@ -1,4 +1,4 @@
-package cpup.mc.personalTech.air.client
+package cpup.mc.personalTech.air
 
 import net.minecraft.client.settings.KeyBinding
 import cpup.mc.personalTech.PersonalTech

@@ -1,4 +1,4 @@
-package cpup.mc.personalTech.air.client
+package cpup.mc.personalTech.air
 
 import net.minecraftforge.common.IExtendedEntityProperties
 import net.minecraft.nbt.NBTTagCompound
@@ -29,10 +29,12 @@ class PlayerData extends IExtendedEntityProperties {
 		compound.setInteger("damage", attackMode.dmg)
 		compound.setString("tool", harvestMode.tool)
 		compound.setInteger("level", harvestMode.level)
-		compound.setString("mode", mode match {
-			case `attackMode` => "attack"
-			case `harvestMode` => "harvest"
-			case _ => "disabled"
+		compound.setString("mode", if(mode == attackMode) {
+			"attack"
+		} else if(mode == harvestMode) {
+			"harvest"
+		} else {
+			"disabled"
 		})
 	}
 }

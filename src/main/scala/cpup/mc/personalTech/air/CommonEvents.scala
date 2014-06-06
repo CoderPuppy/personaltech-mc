@@ -1,4 +1,4 @@
-package cpup.mc.personalTech.air.client
+package cpup.mc.personalTech.air
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import net.minecraftforge.event.entity.living.LivingHurtEvent

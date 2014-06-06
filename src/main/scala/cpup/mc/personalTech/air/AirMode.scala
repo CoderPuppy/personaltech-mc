@@ -1,4 +1,4 @@
-package cpup.mc.personalTech.air.client
+package cpup.mc.personalTech.air
 
 sealed trait AirMode {}
 

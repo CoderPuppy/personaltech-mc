@@ -5,6 +5,8 @@ import cpw.mods.fml.common.FMLCommonHandler
 import net.minecraftforge.common.MinecraftForge
 
 class CommonProxy extends CPupCommonProxy[PersonalTech.type] {
+	def mod = PersonalTech
+
 	def registerEvents {
 		val airCommonEvents = new air.CommonEvents
 		FMLCommonHandler.instance().bus().register(airCommonEvents)
