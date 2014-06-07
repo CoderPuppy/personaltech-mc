@@ -11,7 +11,7 @@ import cpw.mods.fml.client.registry.ClientRegistry
 import cpw.mods.fml.common.gameevent.{InputEvent, TickEvent}
 import net.minecraft.util.ResourceLocation
 import org.lwjgl.opengl.GL11
-import net.minecraft.client.gui.Gui
+import net.minecraft.client.gui.{ScaledResolution, Gui}
 
 class ClientEvents {
 	def mod = PersonalTech
@@ -81,8 +81,12 @@ class ClientEvents {
 	def renderTick(e: TickEvent.RenderTickEvent) {
 		if(choosePowerKeyBind.getIsKeyPressed) {
 			val mc = Minecraft.getMinecraft
-			Mouse.getDX
-			Mouse.getDY
+			val dx = Mouse.getDX
+			val dy = Mouse.getDY
+//			println(dx, dy)
+			cursorX += dx / 2
+			cursorY += -dy / 2
+			checkCursor
 			mc.mouseHelper.deltaX = 0
 			mc.mouseHelper.deltaY = 0
 			mc.thePlayer.rotationYaw = playerYaw
@@ -94,11 +98,37 @@ class ClientEvents {
 		}
 	}
 
+	def checkCursor {
+		val mc = Minecraft.getMinecraft
+		val scaledRes = new ScaledResolution(mc.gameSettings, mc.displayWidth, mc.displayHeight)
+		val screenWidth = scaledRes.getScaledWidth
+		val screenHeight = scaledRes.getScaledHeight
+		val data = PlayerData.get(mc.thePlayer).getOrElse(new PlayerData)
+
+		val width = 2 + mc.fontRenderer.getStringWidth("Disabled") + 2 + mc.fontRenderer.getStringWidth("Attack") + 2 + mc.fontRenderer.getStringWidth("Harvest") + 2
+		val height = 50
+		val x = (screenWidth - width) / 2
+		val y = (screenHeight - height) / 2
+		var modeX = -width / 2 - 2
+		val modeY = -height / 2 - 2
+		def checkOption(name: String, mode: AirMode) {
+			val nameWidth = mc.fontRenderer.getStringWidth(name)
+			val nameHeight = 10
+			if(cursorX >= modeX && cursorX <= modeX + nameWidth && cursorY >= modeY && cursorY <= modeY + nameHeight) {
+				data.mode = mode
+			}
+			modeX +=  + 2
+		}
+		checkOption("Disabled", AirMode.Disabled)
+		checkOption("Attack", data.attackMode)
+		checkOption("Harvest", data.harvestMode)
+	}
+
 	@SubscribeEvent
 	def mouse(e: MouseEvent) {
 		if(choosePowerKeyBind.getIsKeyPressed) {
-			cursorX += e.dx / 1000
-			cursorY += e.dy / 1000
+//			cursorX += e.dx / 2
+//			cursorY += -e.dy / 2
 		}
 	}
 
@@ -107,10 +137,10 @@ class ClientEvents {
 		val f1: Float = 0.00390625F
 		val tessellator: Tessellator = Tessellator.instance
 		tessellator.startDrawingQuads
-		tessellator.addVertexWithUV((par1 + 0).asInstanceOf[Double], (par2 + par6).asInstanceOf[Double], 0, ((par3 + 0).asInstanceOf[Float] * f).asInstanceOf[Double], ((par4 + par6).asInstanceOf[Float] * f1).asInstanceOf[Double])
-		tessellator.addVertexWithUV((par1 + par5).asInstanceOf[Double], (par2 + par6).asInstanceOf[Double], 0, ((par3 + par5).asInstanceOf[Float] * f).asInstanceOf[Double], ((par4 + par6).asInstanceOf[Float] * f1).asInstanceOf[Double])
-		tessellator.addVertexWithUV((par1 + par5).asInstanceOf[Double], (par2 + 0).asInstanceOf[Double], 0, ((par3 + par5).asInstanceOf[Float] * f).asInstanceOf[Double], ((par4 + 0).asInstanceOf[Float] * f1).asInstanceOf[Double])
-		tessellator.addVertexWithUV((par1 + 0).asInstanceOf[Double], (par2 + 0).asInstanceOf[Double], 0, ((par3 + 0).asInstanceOf[Float] * f).asInstanceOf[Double], ((par4 + 0).asInstanceOf[Float] * f1).asInstanceOf[Double])
+		tessellator.addVertexWithUV((par1 + 0).asInstanceOf[Double], (par2 + par6).asInstanceOf[Double], 1, ((par3 + 0).asInstanceOf[Float] * f).asInstanceOf[Double], ((par4 + par6).asInstanceOf[Float] * f1).asInstanceOf[Double])
+		tessellator.addVertexWithUV((par1 + par5).asInstanceOf[Double], (par2 + par6).asInstanceOf[Double], 1, ((par3 + par5).asInstanceOf[Float] * f).asInstanceOf[Double], ((par4 + par6).asInstanceOf[Float] * f1).asInstanceOf[Double])
+		tessellator.addVertexWithUV((par1 + par5).asInstanceOf[Double], (par2 + 0).asInstanceOf[Double], 1, ((par3 + par5).asInstanceOf[Float] * f).asInstanceOf[Double], ((par4 + 0).asInstanceOf[Float] * f1).asInstanceOf[Double])
+		tessellator.addVertexWithUV((par1 + 0).asInstanceOf[Double], (par2 + 0).asInstanceOf[Double], 1, ((par3 + 0).asInstanceOf[Float] * f).asInstanceOf[Double], ((par4 + 0).asInstanceOf[Float] * f1).asInstanceOf[Double])
 		tessellator.draw
 	}
 
