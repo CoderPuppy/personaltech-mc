@@ -24,11 +24,12 @@ class ClientEvents {
 	var playerYaw = 0f
 	var playerYawHead = 0f
 	var playerPitch = 0f
+	var powerChooserOpen = false
 
 	@SubscribeEvent
 	def renderOverlay(e: RenderGameOverlayEvent) {
 //		mod.logger.debug("is = {}, get = {}", choosePowerKeyBind.isPressed, choosePowerKeyBind.getIsKeyPressed)
-		if(choosePowerKeyBind.getIsKeyPressed) {
+		if(powerChooserOpen) {
 			val tess = Tessellator.instance
 			val mc = Minecraft.getMinecraft
 			val screenWidth = e.resolution.getScaledWidth
@@ -79,7 +80,7 @@ class ClientEvents {
 
 	@SubscribeEvent
 	def renderTick(e: TickEvent.RenderTickEvent) {
-		if(choosePowerKeyBind.getIsKeyPressed) {
+		if(powerChooserOpen) {
 			val mc = Minecraft.getMinecraft
 			val dx = Mouse.getDX
 			val dy = Mouse.getDY
@@ -100,17 +101,12 @@ class ClientEvents {
 
 	def checkCursor {
 		val mc = Minecraft.getMinecraft
-		val scaledRes = new ScaledResolution(mc.gameSettings, mc.displayWidth, mc.displayHeight)
-		val screenWidth = scaledRes.getScaledWidth
-		val screenHeight = scaledRes.getScaledHeight
 		val data = PlayerData.get(mc.thePlayer).getOrElse(new PlayerData)
 
 		val width = 2 + mc.fontRenderer.getStringWidth("Disabled") + 2 + mc.fontRenderer.getStringWidth("Attack") + 2 + mc.fontRenderer.getStringWidth("Harvest") + 2
 		val height = 50
-		val x = (screenWidth - width) / 2
-		val y = (screenHeight - height) / 2
-		var modeX = -width / 2 - 2
-		val modeY = -height / 2 - 2
+		var modeX = -(width / 2) + 2
+		val modeY = -(height / 2) + 2
 		def checkOption(name: String, mode: AirMode) {
 			val nameWidth = mc.fontRenderer.getStringWidth(name)
 			val nameHeight = 10
@@ -122,14 +118,6 @@ class ClientEvents {
 		checkOption("Disabled", AirMode.Disabled)
 		checkOption("Attack", data.attackMode)
 		checkOption("Harvest", data.harvestMode)
-	}
-
-	@SubscribeEvent
-	def mouse(e: MouseEvent) {
-		if(choosePowerKeyBind.getIsKeyPressed) {
-//			cursorX += e.dx / 2
-//			cursorY += -e.dy / 2
-		}
 	}
 
 	def drawTexturedModalRect(par1: Int, par2: Int, par3: Int, par4: Int, par5: Int, par6: Int) {
@@ -153,6 +141,10 @@ class ClientEvents {
 			playerYaw = mc.thePlayer.rotationYaw
 			playerYawHead = mc.thePlayer.rotationYawHead
 			playerPitch = mc.thePlayer.rotationPitch
+			powerChooserOpen = true
+		}
+		if(!choosePowerKeyBind.getIsKeyPressed) {
+			powerChooserOpen = false
 		}
 		wasChoosePowerDown = choosePowerKeyBind.getIsKeyPressed
 	}
