@@ -18,7 +18,7 @@ class PlayerData extends IExtendedEntityProperties {
 	override def loadNBTData(compound: NBTTagCompound) {
 		attackMode = AirMode.Attack(compound.getInteger("damage"))
 		harvestMode = AirMode.Harvest(Option(compound.getString("tool")).getOrElse("pickaxe"), compound.getInteger("level"))
-		compound.getString("mode") match {
+		mode = compound.getString("mode") match {
 			case "attack" => attackMode
 			case "harvest" => harvestMode
 			case _ => AirMode.Disabled
