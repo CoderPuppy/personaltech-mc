@@ -29,6 +29,7 @@ class ClientEvents {
 	@SubscribeEvent
 	def renderOverlay(e: RenderGameOverlayEvent) {
 //		mod.logger.debug("is = {}, get = {}", choosePowerKeyBind.isPressed, choosePowerKeyBind.getIsKeyPressed)
+		checkKey
 		if(powerChooserOpen) {
 			val tess = Tessellator.instance
 			val mc = Minecraft.getMinecraft
@@ -80,6 +81,7 @@ class ClientEvents {
 
 	@SubscribeEvent
 	def renderTick(e: TickEvent.RenderTickEvent) {
+		checkKey
 		if(powerChooserOpen) {
 			val mc = Minecraft.getMinecraft
 			val dx = Mouse.getDX
@@ -134,6 +136,13 @@ class ClientEvents {
 
 	@SubscribeEvent
 	def keyEvent(e: InputEvent.KeyInputEvent) {
+		checkKey
+	}
+
+	def checkKey {
+		if(!choosePowerKeyBind.getIsKeyPressed) {
+			powerChooserOpen = false
+		}
 		if(choosePowerKeyBind.getIsKeyPressed && !wasChoosePowerDown) {
 			val mc = Minecraft.getMinecraft
 			cursorX = 0
@@ -143,9 +152,7 @@ class ClientEvents {
 			playerPitch = mc.thePlayer.rotationPitch
 			powerChooserOpen = true
 		}
-		if(!choosePowerKeyBind.getIsKeyPressed) {
-			powerChooserOpen = false
-		}
+		mod.logger.trace("choose power: ", choosePowerKeyBind.getIsKeyPressed)
 		wasChoosePowerDown = choosePowerKeyBind.getIsKeyPressed
 	}
 }
